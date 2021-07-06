@@ -1,3 +1,4 @@
+This readMe file is created along with the journey of learning the Spring Security concepts.
 # Spring-Security
 Spring-security concepts
 
@@ -47,12 +48,22 @@ It is 2 step process to configure builder instance :
 
 Example :
 ```
-@Override
+	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
 			.withUser("hiren")
 			.password("hiren")
 			.roles("User");
+	}
+	
+	/**
+	 * Clear text password is strict NO in Spring.
+	 * Just for tutorial purpose we are passing this.
+	 * @return
+	 */
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
 	}
 ```
 
