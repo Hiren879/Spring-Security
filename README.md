@@ -22,7 +22,39 @@ Once you will add this maven dependency, you will get
 	spring.security.user.password=<password>
 	```
 
+## Congifuring Spring-Security
+### AuthenticationManager
+Authentication manager manages authentication.
+```
+authenticate()
+```
+Authenticate() method perform authentication on uesr and return if user  is successfully authenticated or throws exception.
 
+### AuthenticationManagerBuilder
+This is a builder pattern. You should use it to configure authentication for your application.
+It is a 2 steps process :
+1. Get hold of **AuthenticationManagerBuilder**
+2. Set the configuaration on it.
+
+### Extends WebSecurityConfigurerAdapter
+```
+configure()
+```
+When you extend this class, spring framework gives you opportunity to override **configure()** method where you will get instance of **AuthenticationManagerBuilder**, You can now modify it and pass your spring security configuration as per the requirement.
+It is 2 step process to configure builder instance :
+1. Tell which type of authetication you want i.e. inMemoryAuthentication()
+2. Pass user, password & role.
+
+Example :
+```
+@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+			.withUser("hiren")
+			.password("hiren")
+			.roles("User");
+	}
+```
 
 ### Author
 ---
