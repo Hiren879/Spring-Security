@@ -1,4 +1,4 @@
-This readMe file is created along with the journey of learning the Spring Security concepts.
+This readMe file is created along with the journey of learning the Spring Security concepts using free course available on [JavaBrains youtube course](https://www.youtube.com/playlist?list=PLqq-6Pq4lTTYTEooakHchTGglSvkZAjnE)
 # Spring-Security
 Spring-security concepts
 
