@@ -83,7 +83,7 @@ Following will be our user-role mapping :
 | /user | USER/ADMIN roles |
 | /admin | ADMIN role |
 ```
-http.authorizeRequests()
+	http.authorizeRequests()
 			.antMatchers("/**").hasRole("ADMIN")
 			.and().formLogin();
 ```
@@ -93,7 +93,7 @@ In above code snippet :
 
 Below code snippet is the more advance version :
 ```
-@Override
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/admin").hasRole("ADMIN")
@@ -104,7 +104,28 @@ Below code snippet is the more advance version :
 ```
 Here,
 1. Higher & more restrictive role must come at the first place and then less restrictive.
-2. If you will not follow point number 1 then Spring security may not behave as per your configuration.
+2. If you will not follow the point number 1 then Spring security may not behave as per your configuration.
+
+## How internally Spring performs authentication & authorization ?
+### Filters
+When you add spring security dependency, Spring will automatically start intercepting all the incoming requests using **DelegatingFilterProxy** before delegating it to servlets.
+So there are two specific filters which performs authentication and authorization.
+
+### Authentication using filters
+When Spring start authentication it takes credentials as input and returns **principal** as output. Object type will be **authentication**.
+
+Here is the method signature from interface **AuthenticationProvider**
+```
+Authentication authenticate(Authentication authentication)
+```
+![image](https://user-images.githubusercontent.com/2741709/125129805-a0064a00-e11d-11eb-87d5-821c2371044e.png)
+As shown in above image :
+1. First filter will intercept the incoming request
+2. Then it will pass the credential to the **AuthenticationManager**
+3. Authentication manager then identify the implementation.
+4. Based on **AuthenticationProvider** it will use credential storage resources to authenticate the the user and returns the **Principal** object in the form of Authentication object.
+5. It will be then stored in the **ThreadLocal** object to extract user related information like username, password, isAuthenticatd boolean etc.
+
 
 ### Author
 ---
