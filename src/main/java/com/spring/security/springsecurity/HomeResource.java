@@ -11,4 +11,14 @@ public class HomeResource {
 		return "<h1>Welcome Home !!</h1>";
 	}
 	
+	
+	@GetMapping("/user")
+	public String getUser() {
+		return "<h1>Welcome User !!</h1>";
+	}
+	
+	@GetMapping("/admin")
+	public String getAdmin() {
+		return "<h1>Welcome Admin !!</h1>";
+	}
 }

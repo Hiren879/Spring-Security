@@ -39,7 +39,7 @@ It is a 2 steps process :
 
 ### Extends WebSecurityConfigurerAdapter
 ```
-configure()
+configure(AuthenticationManagerBuilder)
 ```
 When you extend this class, spring framework gives you opportunity to override **configure()** method where you will get instance of **AuthenticationManagerBuilder**, You can now modify it and pass your spring security configuration as per the requirement.
 It is 2 step process to configure builder instance :
@@ -66,6 +66,45 @@ Example :
 		return NoOpPasswordEncoder.getInstance();
 	}
 ```
+
+### Configuration Authorization using HttpSecurity
+- We will be configuring who will access WHAT !!
+- One user would be having one specific role and the other will be having the other specific role.
+- We will use again the same method we used to configure authentication which is **configure()** method.
+```
+configure(httpSecurity)
+```
+**httpSecurity** can be used to configure authorization here.
+
+Following will be our user-role mapping :
+|API end point | Roles allows to access it |
+| ------ | ------ |
+| / | All (unauthenticated) |
+| /user | USER/ADMIN roles |
+| /admin | ADMIN role |
+```
+http.authorizeRequests()
+			.antMatchers("/**").hasRole("ADMIN")
+			.and().formLogin();
+```
+In above code snippet :
+1.  "/**" means any URL and any nested URL.
+2. hasRole("ADMIN") means all URLs (in this case) are only accessible by users who has ADMIN role.
+
+Below code snippet is the more advance version :
+```
+@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+			.antMatchers("/admin").hasRole("ADMIN")
+			.antMatchers("/user").hasAnyRole("ADMIN", "USER")
+			.antMatchers("/").permitAll()
+			.and().formLogin();
+	}
+```
+Here,
+1. Higher & more restrictive role must come at the first place and then less restrictive.
+2. If you will not follow point number 1 then Spring security may not behave as per your configuration.
 
 ### Author
 ---
