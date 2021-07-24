@@ -126,6 +126,30 @@ As shown in above image :
 4. Based on **AuthenticationProvider** it will use credential storage resources to authenticate the the user and returns the **Principal** object in the form of Authentication object.
 5. It will be then stored in the **ThreadLocal** object to extract user related information like username, password, isAuthenticatd boolean etc.
 
+### Adding H2 Database
+So after adding following dependency for H2 database we are now able to run the application using "schema.sql" & "data.sql"
+1. We have added 2 users into "users" table
+2. We have added 2 authorities named "USER" & "ADMIN"
+3. We have created schema having two tables "users" & "authorities"
+4. Above tables are already known to Spring so we do not have to write extra code or to do extra configuration.
+
+We have added following dependencies to make it up and running with H2 database.
+
+```
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+```
 
 ### Author
 ---
