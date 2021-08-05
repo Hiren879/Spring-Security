@@ -151,6 +151,18 @@ We have added following dependencies to make it up and running with H2 database.
 		</dependency>
 ```
 
+### What if table names are different in my schema ?
+**usersByUserNameQuery**
+**authoritiesByUserNameQuery**
+Above two builder pattern methods will allow you to handle this scenario.
+Sample Code :
+```
+auth.jdbcAuthentication().dataSource(dataSource)
+				.usersByUsernameQuery("select username, password, enabled from users where username = ?")
+				.authoritiesByUsernameQuery("select username, authority from authorities where username = ?");
+```
+
+
 ### Author
 ---
 
