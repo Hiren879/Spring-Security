@@ -126,42 +126,78 @@ As shown in above image :
 4. Based on **AuthenticationProvider** it will use credential storage resources to authenticate the the user and returns the **Principal** object in the form of Authentication object.
 5. It will be then stored in the **ThreadLocal** object to extract user related information like username, password, isAuthenticatd boolean etc.
 
-### Adding H2 Database
-So after adding following dependency for H2 database we are now able to run the application using "schema.sql" & "data.sql"
-1. We have added 2 users into "users" table
-2. We have added 2 authorities named "USER" & "ADMIN"
-3. We have created schema having two tables "users" & "authorities"
-4. Above tables are already known to Spring so we do not have to write extra code or to do extra configuration.
+### Adding MySql Database
+Database will be having one table "user" having fields
+1. id : PK
+2. active : If user is active or not. Boolean field
+3. password : Password of a user
+4. roles : all the comma saperated roles
+5. user_name : User name of the user
 
-We have added following dependencies to make it up and running with H2 database.
+Required dependencies :
+6. Spring web starter
+7. Spring security starter
+8. JPA
+9. MySql driver
+
+Requirement :
+10. /user : should only be accessd by someone having role of USER & ADMIN.
+11. /admin : should only be accessd by someone having role of only ADMIN.
+
+### Extend WebSecutiryConfigurerAdapter
+Here we will get two methods which need to be extended to fullfil our requirement.
+
+**Setup authentication** : Tell spring security using which implementation you want to get your user authenticated
 
 ```
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService);
+	}
 ```
 
-### What if table names are different in my schema ?
-**usersByUserNameQuery**
-**authoritiesByUserNameQuery**
-Above two builder pattern methods will allow you to handle this scenario.
-Sample Code :
+**Setup Authorization**: Tell spring securtiy who can access what
+
 ```
-auth.jdbcAuthentication().dataSource(dataSource)
-				.usersByUsernameQuery("select username, password, enabled from users where username = ?")
-				.authoritiesByUsernameQuery("select username, authority from authorities where username = ?");
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+				.antMatchers("/admin").hasRole("ADMIN")
+				.antMatchers("/user").hasAnyRole("ADMIN", "USER")
+				.antMatchers("/").permitAll()
+				.and().formLogin();
+	}
 ```
 
+**Authentication Manager -> AuthenticationProvider -> UserDetailsService -> loadByUserName**
+
+1. UserDetailsService will act like plug and play for source of the data. It could be the text file, excel or the database. In our case it will be JPA.
+2. We just need to create an implementation of the **org.springframework.security.core.userdetails.UserDetailsService** which will return the object of **org.springframework.security.core.userdetails.UserDetails**
+3. This implementation can get the UserDetails object from anywhere. It does not matter. In our case we will fetch this user object from MySql DB and transform it into the UserDetails object.
+4. So now everytime this implementation of UserDetails will call its method **loadUserByUsername** with the UserName it gets from the UI.
+
+~~~
+@Service
+public class SpringSecurityUserService implements UserDetailsService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<User> user = userRepository.findByUserName(username);
+		user.orElseThrow(() -> new UsernameNotFoundException("Not found for userName :: " + username));
+		return user.map(MyUserDetails::new).get();
+	}
+}
+~~~
+
+5. **UserDetails** : We need to provide implementation of this class as well. So that we can get the user from DB and conver those fields into UserDetails type of object.
+~~~
+public class MyUserDetails implements UserDetails
+~~~
+
+6. We have created above class whiche implements **org.springframework.security.core.userdetails.UserDetails**
 
 ### Author
 ---

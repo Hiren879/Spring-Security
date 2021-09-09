@@ -11,6 +11,16 @@ import org.springframework.stereotype.Service;
 import com.spring.security.springsecurity.entity.User;
 import com.spring.security.springsecurity.repository.UserRepository;
 
+/**
+ * This class will call any DB service/text file/excel to get the user
+ * information. And return the UserDetails object. In our case we are using JPA
+ * to fetch the user details from MySql DB and converting it into the
+ * UserDetails.
+ * 
+ * @author Admin
+ *
+ */
+
 @Service
 public class SpringSecurityUserService implements UserDetailsService {
 
