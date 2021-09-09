@@ -127,7 +127,7 @@ As shown in above image :
 5. It will be then stored in the **ThreadLocal** object to extract user related information like username, password, isAuthenticatd boolean etc.
 
 ### Adding MySql Database
-Database will be having one table "user" having fields
+Database will be having one table "user" with the fields
 1. id : PK
 2. active : If user is active or not. Boolean field
 3. password : Password of a user
@@ -135,14 +135,14 @@ Database will be having one table "user" having fields
 5. user_name : User name of the user
 
 Required dependencies :
-6. Spring web starter
-7. Spring security starter
-8. JPA
-9. MySql driver
+1. Spring web starter
+2. Spring security starter
+3. JPA
+4. MySql driver
 
 Requirement :
-10. /user : should only be accessd by someone having role of USER & ADMIN.
-11. /admin : should only be accessd by someone having role of only ADMIN.
+1. /user : should only be accessd by someone having role of USER & ADMIN.
+2. /admin : should only be accessd by someone having role of only ADMIN.
 
 ### Extend WebSecutiryConfigurerAdapter
 Here we will get two methods which need to be extended to fullfil our requirement.
