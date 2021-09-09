@@ -171,9 +171,9 @@ Here we will get two methods which need to be extended to fullfil our requiremen
 
 **Authentication Manager -> AuthenticationProvider -> UserDetailsService -> loadByUserName**
 
-1. UserDetailsService will act like plug and play for source of the data. It could be the text file, excel or the database. In our case it will be JPA.
+1. UserDetailsService will act like plug and play for source of the data. It could be the text file, excel or the database. In our case it will be JPA [and then MySql as a data source].
 2. We just need to create an implementation of the **org.springframework.security.core.userdetails.UserDetailsService** which will return the object of **org.springframework.security.core.userdetails.UserDetails**
-3. This implementation can get the UserDetails object from anywhere. It does not matter. In our case we will fetch this user object from MySql DB and transform it into the UserDetails object.
+3. This implementation can get the UserDetails object from anywhere. In our case we will fetch this user object from MySql DB via JPA and transform it into the UserDetails object.
 4. So now everytime this implementation of UserDetails will call its method **loadUserByUsername** with the UserName it gets from the UI.
 
 ~~~
@@ -198,6 +198,9 @@ public class MyUserDetails implements UserDetails
 ~~~
 
 6. We have created above class whiche implements **org.springframework.security.core.userdetails.UserDetails**
+
+Extracted JPA query :
+Hibernate: select user0_.id as id1_0_, user0_.active as active2_0_, user0_.password as password3_0_, user0_.roles as roles4_0_, user0_.user_name as user_nam5_0_ from user user0_ where user0_.user_name=?
 
 ### Author
 ---
