@@ -2,6 +2,11 @@ This readMe file is created along with the journey of learning the Spring Securi
 # Spring-Security
 Spring-security concepts
 
+## Basics
+1. Encoding -> Input can be derived from the output. Anyone can guess and read the original message.
+3. Encryption -> Input can be derived only by secret key. Anyone with a secret key can read the original message.
+4. Hashing -> Input can never be derived by any means. You can only convert input into the same hash and see if it is tampored or not.
+
 |Security pillers | Description |
 | ------ | ------ |
 | Authentication | Who are you ? This can be knowledge base or posession based. |
